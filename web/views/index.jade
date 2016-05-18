@@ -1,0 +1,35 @@
+extends layout
+
+block content
+    p Welcome to #{title}
+    .am-g
+        .am-u-sm-12.am-u-md-6.am-u-lg-3.am-u-sm-centered
+            span 请登录
+    .am-g
+        .am-u-sm-12.am-u-md-6.am-u-lg-3.am-u-sm-centered
+            form(id='login')
+                .am-input-group
+                    span.am-input-group-label
+                        i.am-icon-user.am-icon-fw
+                    input(type='text', class='am-form-field',placeholder='Username',name='mobile')
+                .am-input-group
+                    span.am-input-group-label
+                        i.am-icon-lock.am-icon-fw
+                    input(type='password', class='am-form-field',placeholder='Password',name='password')
+            button(class='am-btn am-btn-secondary am-btn-block' onclick='login();') 登录
+
+    script(type='text/javascript').
+        function login() {
+            postForm('/users/login', "json", "#login", null, null, function (data) {
+                showJsonData(data, loginSucc, loginFail);
+            }, false);
+        }
+
+        function loginSucc() {
+            window.location.href = "/users/";
+        }
+
+        function loginFail() {
+            alert('登录失败');
+        }
+  
