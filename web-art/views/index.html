@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>模版</title>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="renderer" content="webkit"/>
+    <meta http-equiv="Cache-Control" content="no-siteapp"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no"/>
+    <base href="/">
+    <link rel="stylesheet" href="/assets/css/amazeui.css"/>
+    <link rel="stylesheet" href="/stylesheets/style.css"/>
+
+    <!--[if lt IE 9]>
+    <script src="http://libs.baidu.com/jquery/1.11.3/jquery.min.js"></script>
+    <script src="http://cdn.staticfile.org/modernizr/2.8.3/modernizr.js"></script>
+    <script src="/assets/js/amazeui.ie8polyfill.min.js"></script>
+    <![endif]-->
+
+    <!--[if (gte IE 9)|!(IE)]><!-->
+    <script src="/assets/js/jquery.min.js"></script>
+    <!--<![endif]-->
+    <script src="/assets/js/amazeui.min.js"></script>
+    <script src="/javascripts/common.js" type="text/javascript"></script>
+</head>
+<body>
+<div>
+    <p>Welcome to {{title}} </p>
+    <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-6 am-u-lg-3 am-u-sm-centered">
+            <span>请登录</span>
+        </div>
+    </div>
+    <div class="am-g">
+        <div class="am-u-sm-12 am-u-md-6 am-u-lg-3 am-u-sm-centered">
+            <form id="login">
+                <div class="am-input-group">
+                    <span class="am-input-group-label">
+                        <i class="am-icon-user am-icon-fw"></i>
+                    </span>
+                    <input type="text" class="am-form-field" placeholder="Username" name="mobile"/>
+                </div>
+                <div class="am-input-group">
+                    <span class="am-input-group-label">
+                        <i class="am-icon-lock am-icon-fw"></i>
+                    </span>
+                    <input type="password" class="am-form-field" placeholder="Password" name="password"/>
+                </div>
+            </form>
+            <button class="am-btn am-btn-secondary am-btn-block" onclick="login();">登录</button>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    function login() {
+        postForm("/users/login", "json", "#login", null, null, function (data) {
+            showJsonData(data, loginSucc, loginFail);
+        }, false);
+    }
+
+    function loginSucc() {
+        window.location.href = "/users/";
+    }
+
+    function loginFail() {
+        alert("登录失败");
+    }
+</script>
+</body>
+</html>
+
+  

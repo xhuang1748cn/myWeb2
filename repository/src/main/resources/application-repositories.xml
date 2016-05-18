@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/tx
+		http://www.springframework.org/schema/tx/spring-tx.xsd
+		http://www.springframework.org/schema/aop
+		http://www.springframework.org/schema/aop/spring-aop.xsd
+		http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+	<!-- 启动注解 -->
+	<context:annotation-config />
+	<!-- 启动扫描包实例化 -->
+	<context:component-scan base-package="cn.srn.web2.repositories.daos" />
+
+	<!-- 使用cglib代理 -->
+	<!-- <tx:annotation-driven proxy-target-class="true"/> -->
+
+	<bean id="pmsplusDataSource" class="org.apache.commons.dbcp.BasicDataSource"
+		destroy-method="close">
+		<property name="driverClassName" value="${pms-driver}" />
+		<property name="url" value="${pms-url}" />
+		<property name="username" value="${pms-username}" />
+		<property name="password" value="${pms-password}" />
+		<!-- 初始化连接大小 -->
+		<property name="initialSize" value="${pms-initialSize}"/>
+		<!-- 连接池最大数量 -->
+		<property name="maxActive" value="${pms-maxActive}"/>
+		<!-- 连接池最大空闲 -->
+		<property name="maxIdle" value="${pms-maxIdle}"/>
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle" value="${pms-minIdle}"/>
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait" value="${pms-maxWait}"/>
+
+		<!-- 测试连接有效 -->
+		<property name="validationQuery" value="${pms-validationQuery}"/>
+		<property name="testWhileIdle" value="${pms-testWhileIdle}"/>
+		<property name="timeBetweenEvictionRunsMillis" value="${pms-timeBetweenEvictionRunsMillis}"/>
+		<property name="minEvictableIdleTimeMillis" value="${pms-minEvictableIdleTimeMillis}"/>
+		<property name="testOnBorrow" value="${pms-testOnBorrow}"/>
+	</bean>
+
+	<!-- spring和MyBatis完美整合，不需要mybatis的配置映射文件 -->
+	<bean id="pmsplusSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+		<property name="dataSource" ref="pmsplusDataSource" />
+		<!-- 自动扫描mapping.xml文件 -->
+		<property name="mapperLocations" value="classpath:pmsplusmapping/**/*.xml"/>
+		<property name="typeAliasesPackage" value="cn.srn.web2.repositories.entity" />
+	</bean>
+	
+	<bean name="pmsplusMapperScannerConfigurer" class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="cn.srn.web2.repositories.daos" />
+        <property name="annotationClass" value="org.springframework.stereotype.Repository"/>
+        <property name="sqlSessionFactoryBeanName" value="pmsplusSqlSessionFactory"/>
+    </bean>
+	
+</beans>
